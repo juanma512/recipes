@@ -63,7 +63,20 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <goals>install</goals>
+        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+      </plugin>
     </plugins>
   </build>
+
+  <scm>
+    <developerConnection>scm:git:https://github.com/juanma512/recipes.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 
 </project>
