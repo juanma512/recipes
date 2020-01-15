@@ -15,12 +15,14 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -41,7 +43,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        System.out.println("Loading recipes ... ");
+        log.info("Loading recipes ... ");
 
         UnitOfMeasure unit = unitOfMeasureRepository.findByUom("Unit").orElse(null);
         UnitOfMeasure teaspoon = unitOfMeasureRepository.findByUom("Teaspoon").orElse(null);
@@ -177,6 +179,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @SneakyThrows
     private Byte[] loadImage(String file) {
+        log.info("Creating byte array ... ");
         Resource resource = resourceLoader.getResource("classpath:" + file);
         byte[] resourceBytes = resource.getInputStream().readAllBytes();
         Byte[] image = new Byte[resourceBytes.length];
