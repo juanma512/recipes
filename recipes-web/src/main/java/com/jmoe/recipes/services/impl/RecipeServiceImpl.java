@@ -4,6 +4,7 @@ import com.jmoe.recipes.model.Recipe;
 import com.jmoe.recipes.repositories.RecipeRepository;
 import com.jmoe.recipes.services.RecipeService;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,4 +26,12 @@ public class RecipeServiceImpl implements RecipeService {
         recipeRepository.findAll().iterator().forEachRemaining(recipes::add);
         return recipes;
     }
+
+    @Override
+    public Optional<Recipe> getRecipe(Long id) {
+        log.info(String.format("Fetching recipe %s", id));
+        return recipeRepository.findById(id);
+    }
+
+
 }

@@ -1,6 +1,6 @@
 package com.jmoe.recipes.controllers;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -13,15 +13,17 @@ import com.jmoe.recipes.model.Recipe;
 import com.jmoe.recipes.services.RecipeService;
 import java.util.HashSet;
 import java.util.Set;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
+@ExtendWith(MockitoExtension.class)
 public class IndexControllerTest {
 
     @Mock
@@ -29,13 +31,8 @@ public class IndexControllerTest {
     @Mock
     Model model;
 
+    @InjectMocks
     IndexController indexController;
-
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        indexController = new IndexController(recipeService);
-    }
 
     @Test
     public void testMockMVC() throws Exception {

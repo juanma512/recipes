@@ -27,6 +27,21 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+    <dependency>
+      <artifactId>commons-lang3</artifactId>
+      <groupId>org.apache.commons</groupId>
+      <version>3.9</version>
+    </dependency>
+    <dependency>
+      <artifactId>bootstrap</artifactId>
+      <groupId>org.webjars</groupId>
+      <version>4.4.1</version>
+    </dependency>
+    <dependency>
+      <artifactId>jquery</artifactId>
+      <groupId>org.webjars</groupId>
+      <version>3.4.1</version>
+    </dependency>
   </dependencies>
 
 </project>
