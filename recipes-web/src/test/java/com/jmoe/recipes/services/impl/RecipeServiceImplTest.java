@@ -1,11 +1,13 @@
 package com.jmoe.recipes.services.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.jmoe.recipes.converters.RecipeToRecipePayload;
 import com.jmoe.recipes.model.Recipe;
 import com.jmoe.recipes.payloads.RecipePayload;
 import com.jmoe.recipes.repositories.RecipeRepository;
@@ -26,6 +28,8 @@ public class RecipeServiceImplTest {
 
     @Mock
     private RecipeRepository recipeRepository;
+    @Mock
+    private RecipeToRecipePayload recipeToRecipePayload;
 
     @Test
     public void getRecipes() {
@@ -36,6 +40,7 @@ public class RecipeServiceImplTest {
 
         // When
         when(recipeRepository.findAll()).thenReturn(recipes);
+        when(recipeToRecipePayload.convert(any(Recipe.class))).thenReturn(new RecipePayload());
 
         // Then
         Set<RecipePayload> actual = recipeService.getRecipesPayloads();
@@ -50,6 +55,9 @@ public class RecipeServiceImplTest {
 
         // When
         when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+        when(recipeToRecipePayload.convert(any(Recipe.class))).thenReturn(RecipePayload.builder()
+            .id(1L)
+            .build());
 
         // Then
         Optional<RecipePayload> actual = recipeService.getRecipePayload(1L);
