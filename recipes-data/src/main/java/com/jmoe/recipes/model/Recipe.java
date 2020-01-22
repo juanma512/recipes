@@ -15,11 +15,17 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @EqualsAndHashCode(exclude = {"ingredients", "categories"})
 @ToString(exclude = {"ingredients", "categories"})
 @Entity
@@ -55,8 +61,13 @@ public class Recipe {
     private Set<Category> categories = new HashSet<>();
 
     public Recipe addIngredient(Ingredient ingredient) {
-        ingredient.setRecipe(this);
-        ingredients.add(ingredient);
+        Ingredient clone = Ingredient.builder()
+            .amount(ingredient.getAmount())
+            .description(ingredient.getDescription())
+            .unitOfMeasure(ingredient.getUnitOfMeasure())
+            .recipe(this)
+            .build();
+        ingredients.add(clone);
         return this;
     }
 

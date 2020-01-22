@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.jmoe.recipes.model.Recipe;
+import com.jmoe.recipes.payloads.RecipePayload;
 import com.jmoe.recipes.repositories.RecipeRepository;
 import java.util.HashSet;
 import java.util.Optional;
@@ -37,7 +38,7 @@ public class RecipeServiceImplTest {
         when(recipeRepository.findAll()).thenReturn(recipes);
 
         // Then
-        Set<Recipe> actual = recipeService.getRecipes();
+        Set<RecipePayload> actual = recipeService.getRecipesPayloads();
         assertEquals(1, actual.size());
         verify(recipeRepository, times(1)).findAll();
     }
@@ -45,14 +46,13 @@ public class RecipeServiceImplTest {
     @Test
     public void getRecipe() {
         // Given
-        Recipe recipe = new Recipe();
-        recipe.setId(1L);
+        Recipe recipe = Recipe.builder().id(1L).build();
 
         // When
         when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
 
         // Then
-        Optional<Recipe> actual = recipeService.getRecipe(1L);
+        Optional<RecipePayload> actual = recipeService.getRecipePayload(1L);
         assertEquals(1L, actual.get().getId());
         verify(recipeRepository, times(1)).findById(anyLong());
     }

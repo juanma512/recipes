@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.jmoe.recipes.model.Recipe;
+import com.jmoe.recipes.payloads.RecipePayload;
 import com.jmoe.recipes.services.RecipeService;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,28 +46,26 @@ public class IndexControllerTest {
     @Test
     public void getIndex() {
         // Given
-        Set<Recipe> recipes = new HashSet<>();
+        Set<RecipePayload> recipes = new HashSet<>();
         recipes.add(createDummyRecipe(1L));
         recipes.add(createDummyRecipe(2L));
 
         ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
 
         // When
-        when(recipeService.getRecipes()).thenReturn(recipes);
+        when(recipeService.getRecipesPayloads()).thenReturn(recipes);
 
         // Then
         String viewName = indexController.getIndex(model);
 
         assertEquals("index", viewName);
-        verify(recipeService, times(1)).getRecipes();
+        verify(recipeService, times(1)).getRecipesPayloads();
         verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
         Set<Recipe> captorValue = argumentCaptor.getValue();
         assertEquals(2, captorValue.size());
     }
 
-    private Recipe createDummyRecipe(Long id) {
-        Recipe recipe = new Recipe();
-        recipe.setId(id);
-        return recipe;
+    private RecipePayload createDummyRecipe(Long id) {
+        return RecipePayload.builder().id(id).build();
     }
 }

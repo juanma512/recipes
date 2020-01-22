@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import com.jmoe.recipes.model.Recipe;
+import com.jmoe.recipes.payloads.RecipePayload;
 import com.jmoe.recipes.services.RecipeService;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,11 +38,10 @@ class RecipeControllerTest {
     @Test
     void showRecipe() throws Exception {
         // Given
-        Recipe recipe = new Recipe();
-        recipe.setId(1L);
+        RecipePayload recipe = RecipePayload.builder().id(1L).build();
 
         // When
-        when(recipeService.getRecipe(anyLong())).thenReturn(Optional.of(recipe));
+        when(recipeService.getRecipePayload(anyLong())).thenReturn(Optional.of(recipe));
 
         // Then
         mockMvc.perform(get("/recipe/show/1"))

@@ -132,7 +132,8 @@
         <div class="card-body">
           <div class="row">
             <div class="col">
-              <p th:utext="${#strings.replace(recipe.notes.recipeNotes, T(org.apache.commons.lang3.StringUtils).LF, '&lt;br/&gt;')}">
+              <p th:if="${recipe.notes != null}"
+                 th:utext="${#strings.replace(recipe.notes.recipeNotes, T(org.apache.commons.lang3.StringUtils).LF, '&lt;br/&gt;')}">
                 Notes</p>
             </div>
           </div>

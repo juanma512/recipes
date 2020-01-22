@@ -60,15 +60,16 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
                 + "Remember that much of this is done to taste because of the variability in the fresh ingredients. Start with this recipe and adjust to your taste.\n"
                 + "4. Serve: Serve immediately, or if making a few hours ahead, place plastic wrap on the surface of the guacamole and press down to cover it and to prevent air reaching it. (The oxygen in the air causes oxidation which will turn the guacamole brown.) Refrigerate until ready to serve.";
 
-        Notes guacamoleNotes = new Notes();
-        guacamoleNotes.setRecipeNotes(
+        Notes guacamoleNotes = Notes.builder().recipeNotes(
             "The trick to making perfect guacamole is using ripe avocados that are just the right amount of ripeness. Not ripe enough and the avocado will be hard and tasteless. Too ripe and the taste will be off.\n"
-                + "Check for ripeness by gently pressing the outside of the avocado. If there is no give, the avocado is not ripe yet and will not taste good. If there is a little give, the avocado is ripe. If there is a lot of give, the avocado may be past ripe and not good. In this case, taste test first before using.");
+                + "Check for ripeness by gently pressing the outside of the avocado. If there is no give, the avocado is not ripe yet and will not taste good. If there is a little give, the avocado is ripe. If there is a lot of give, the avocado may be past ripe and not good. In this case, taste test first before using.")
+            .build();
 
         Recipe guacamoleRecipe = createRecipe("Perfect Guacamole", 10, 0, 4,
             "Simply Recipes",
             "http://www.simplyrecipes.com", guacamoleDirections, Difficulty.EASY,
             loadImage("/static/Guacamole.jpg"),
+            guacamoleNotes,
             new HashSet<>(
                 Collections
                     .singletonList(categoryRepository.findByDescription("Mexican").orElse(null))));
@@ -102,8 +103,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
             createIngredient("Tortilla chips to serve", new BigDecimal("0"), unit
             ));
 
-        guacamoleRecipe.setNotes(guacamoleNotes);
-
         recipeRepository.save(guacamoleRecipe);
 
         //Grilled cilantro chicken
@@ -120,6 +119,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
             "Simply Recipes",
             "http://www.simplyrecipes.com", grilledChickenDirections, Difficulty.EASY,
             loadImage("/static/GrilledChicken.jpg"),
+            null,
             new HashSet<>(
                 Collections
                     .singletonList(categoryRepository.findByDescription("Mexican").orElse(null))));
@@ -153,28 +153,30 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private Recipe createRecipe(String description, Integer prepTime,
         Integer cookTime, Integer servings, String source, String url, String directions,
-        Difficulty difficulty, Byte[] image, Set<Category> categories) {
-        Recipe recipe = new Recipe();
-        recipe.setDescription(description);
-        recipe.setPrepTime(prepTime);
-        recipe.setCookTime(cookTime);
-        recipe.setServings(servings);
-        recipe.setSource(source);
-        recipe.setUrl(url);
-        recipe.setDirections(directions);
-        recipe.setDifficulty(difficulty);
-        recipe.setImage(image);
-        recipe.setCategories(categories);
-        return recipe;
+        Difficulty difficulty, Byte[] image, Notes notes, Set<Category> categories) {
+        return Recipe.builder()
+            .description(description)
+            .prepTime(prepTime)
+            .cookTime(cookTime)
+            .servings(servings)
+            .source(source)
+            .url(url)
+            .directions(directions)
+            .difficulty(difficulty)
+            .image(image)
+            .notes(notes)
+            .categories(categories)
+            .ingredients(new HashSet<>())
+            .build();
     }
 
     private Ingredient createIngredient(String description, BigDecimal amount,
         UnitOfMeasure unitOfMeasure) {
-        Ingredient ingredient = new Ingredient();
-        ingredient.setDescription(description);
-        ingredient.setAmount(amount);
-        ingredient.setUnitOfMeasure(unitOfMeasure);
-        return ingredient;
+        return Ingredient.builder()
+            .description(description)
+            .amount(amount)
+            .unitOfMeasure(unitOfMeasure)
+            .build();
     }
 
     @SneakyThrows
