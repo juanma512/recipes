@@ -48,7 +48,7 @@ public class RecipeServiceIT {
             .servings(recipePayload.getServings())
             .directions(recipePayload.getDirections())
             .build();
-        RecipePayload actual = recipeService.saveRecipePayload(clone);
+        RecipePayload actual = recipeService.saveRecipe(clone);
 
         // Then
         assertEquals("New description", actual.getDescription());

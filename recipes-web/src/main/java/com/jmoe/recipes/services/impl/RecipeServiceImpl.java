@@ -30,8 +30,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Set<RecipePayload> getRecipesPayloads() {
-        log.info("Fetching recipes");
+    public Set<RecipePayload> getRecipes() {
+        log.debug("Fetching recipes");
         Set<RecipePayload> recipes = new HashSet<>();
         recipeRepository.findAll().iterator()
             .forEachRemaining(recipe -> recipes.add(recipeToRecipePayload.convert(recipe)));
@@ -39,19 +39,26 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Optional<RecipePayload> getRecipePayload(Long id) {
-        log.info(String.format("Fetching recipe %s", id));
+    @Transactional
+    public Optional<RecipePayload> getRecipe(Long id) {
+        log.debug(String.format("Fetching recipe %s", id));
         Optional<Recipe> recipe = recipeRepository.findById(id);
         return recipe.map(recipeToRecipePayload::convert);
     }
 
     @Override
     @Transactional
-    public RecipePayload saveRecipePayload(RecipePayload recipePayload) {
+    public RecipePayload saveRecipe(RecipePayload recipePayload) {
         Recipe recipe = recipePayloadToRecipe.convert(recipePayload);
         Recipe savedRecipe = recipeRepository.save(recipe);
-        log.info("RecipePayload saved");
+        log.debug("RecipePayload saved");
         return recipeToRecipePayload.convert(savedRecipe);
     }
 
+    @Override
+    @Transactional
+    public void deleteRecipeById(Long id) {
+        Optional<Recipe> recipe = recipeRepository.findById(id);
+        recipe.ifPresent(r -> recipeRepository.deleteById(r.getId()));
+    }
 }

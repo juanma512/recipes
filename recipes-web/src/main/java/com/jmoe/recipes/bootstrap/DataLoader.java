@@ -43,7 +43,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        log.info("Loading recipes ... ");
+        log.debug("Loading recipes ... ");
 
         UnitOfMeasure unit = unitOfMeasureRepository.findByUom("Unit").orElse(null);
         UnitOfMeasure teaspoon = unitOfMeasureRepository.findByUom("Teaspoon").orElse(null);
@@ -181,7 +181,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @SneakyThrows
     private Byte[] loadImage(String file) {
-        log.info("Creating byte array ... ");
+        log.debug("Creating byte array ... ");
         Resource resource = resourceLoader.getResource("classpath:" + file);
         byte[] resourceBytes = resource.getInputStream().readAllBytes();
         Byte[] image = new Byte[resourceBytes.length];

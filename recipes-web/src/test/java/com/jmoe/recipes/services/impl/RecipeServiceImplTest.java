@@ -43,7 +43,7 @@ public class RecipeServiceImplTest {
         when(recipeToRecipePayload.convert(any(Recipe.class))).thenReturn(new RecipePayload());
 
         // Then
-        Set<RecipePayload> actual = recipeService.getRecipesPayloads();
+        Set<RecipePayload> actual = recipeService.getRecipes();
         assertEquals(1, actual.size());
         verify(recipeRepository, times(1)).findAll();
     }
@@ -60,9 +60,23 @@ public class RecipeServiceImplTest {
             .build());
 
         // Then
-        Optional<RecipePayload> actual = recipeService.getRecipePayload(1L);
+        Optional<RecipePayload> actual = recipeService.getRecipe(1L);
         assertEquals(1L, actual.get().getId());
         verify(recipeRepository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    public void deleteRecipe() {
+        // Given
+        Recipe recipe = Recipe.builder().id(1L).build();
+
+        // When
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+
+        // Then
+        recipeService.deleteRecipeById(1L);
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).deleteById(anyLong());
     }
 
 }
