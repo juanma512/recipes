@@ -15,6 +15,7 @@ import lombok.Setter;
 public class IngredientPayload {
 
     private Long id;
+    private Long recipeId;
     private String description;
     private BigDecimal amount;
     private UnitOfMeasurePayload unitOfMeasure;

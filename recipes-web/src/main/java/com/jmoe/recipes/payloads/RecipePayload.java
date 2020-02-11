@@ -26,6 +26,7 @@ public class RecipePayload {
     private String url;
     private String directions;
     private Difficulty difficulty;
+    private Byte[] image;
     private NotesPayload notes;
     private Set<CategoryPayload> categories = new HashSet<>();
 

@@ -1,10 +1,12 @@
 package com.jmoe.recipes.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jmoe.recipes.payloads.CategoryPayload;
 import com.jmoe.recipes.payloads.RecipePayload;
 import com.jmoe.recipes.services.CategoryService;
 import com.jmoe.recipes.services.RecipeService;
 import java.util.Optional;
+import java.util.Set;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -39,11 +41,15 @@ public class RecipeController {
         return "/recipes/show";
     }
 
+    @ModelAttribute("allCategories")
+    public Set<CategoryPayload> getCategories() {
+        return categoryService.getCategories();
+    }
+
     @GetMapping("/new")
     public String newRecipe(Model model) {
         log.debug("Display form ...");
         model.addAttribute("recipe", new RecipePayload());
-        model.addAttribute("categories", categoryService.getCategories());
         return "/recipes/create";
     }
 
@@ -51,7 +57,6 @@ public class RecipeController {
     public String updateRecipe(@PathVariable(name = "id") String id, Model model) {
         Optional<RecipePayload> recipe = recipeService.getRecipe(Long.valueOf(id));
         recipe.ifPresent(r -> model.addAttribute("recipe", r));
-        model.addAttribute("categories", categoryService.getCategories());
         return "/recipes/create";
     }
 

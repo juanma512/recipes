@@ -68,7 +68,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         Recipe guacamoleRecipe = createRecipe("Perfect Guacamole", 10, 0, 4,
             "Simply Recipes",
             "http://www.simplyrecipes.com", guacamoleDirections, Difficulty.EASY,
-            loadImage("/static/Guacamole.jpg"),
+            loadImage("/static/images/1.jpg"),
             guacamoleNotes,
             new HashSet<>(
                 Collections
@@ -118,7 +118,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
             "Grilled Cilantro Lime Chicken", 5, 10, 6,
             "Simply Recipes",
             "http://www.simplyrecipes.com", grilledChickenDirections, Difficulty.EASY,
-            loadImage("/static/GrilledChicken.jpg"),
+            loadImage("/static/images/2.jpg"),
             null,
             new HashSet<>(
                 Collections

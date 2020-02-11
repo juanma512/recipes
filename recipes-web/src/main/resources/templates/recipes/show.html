@@ -27,6 +27,7 @@
         <div class="card-header bg-primary">
           <div class="row">
             <div class="col-10">
+              <a class="text-white" href="#" th:href="@{/}">Index &gt;</a>
               <h3 class="text-white" th:text="${recipe.description}"></h3>
             </div>
             <div class="col-2">
@@ -42,10 +43,16 @@
             <div class="col-3">
               <h5>Categories</h5>
             </div>
-            <div class="col-9">
+            <div class="col-3">
               <ul th:each="category : ${recipe.categories}">
                 <li th:text="${category.description}">Category</li>
               </ul>
+            </div>
+            <div class="col-6">
+              <img height="200" th:alt="${recipe.description}"
+                   th:src="@{'/recipe/' + ${recipe.id} + '/image/show'}" width="200"/>
+              <a class="btn btn-secondary" href="#"
+                 th:href="@{'/recipe/' + ${recipe.id} + '/image'}">Edit</a>
             </div>
           </div>
           <div class="row">

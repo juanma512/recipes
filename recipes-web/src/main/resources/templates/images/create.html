@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+  <link crossorigin="anonymous"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+        rel="stylesheet"
+        th:href="@{/webjars/bootstrap/4.4.1/css/bootstrap.min.css}">
+
+  <title>Upload image</title>
+
+  <style>
+    .row {
+      margin-bottom: 15px;
+    }
+  </style>
+
+</head>
+<body>
+<div class="container" style="margin-top: 25px;">
+  <div class="row">
+    <div class="col">
+      <form enctype="multipart/form-data" method="post"
+            th:action="@{'/recipe/' + ${recipeId} + '/image'}">
+        <div class="card">
+          <div class="card-header bg-primary">
+            <h3 class="text-white">Image</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-6 form-group">
+                <label for="file">File:</label>
+                <input class="form-control-file" id="file" name="file" type="file"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <input class="btn btn-primary" type="submit" value="Submit"/>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script crossorigin="anonymous"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        th:src="@{/webjars/jquery/3.4.1/jquery.slim.js}"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        th:src="@{/webjars/popper.js/1.14.3/popper.js}"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/4.4.1/js/bootstrap.js}"></script>
+
+</body>
+</html>

@@ -20,9 +20,11 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -62,6 +64,7 @@ public class Recipe {
 
     public Recipe addIngredient(Ingredient ingredient) {
         Ingredient clone = Ingredient.builder()
+            .id(ingredient.getId())
             .amount(ingredient.getAmount())
             .description(ingredient.getDescription())
             .unitOfMeasure(ingredient.getUnitOfMeasure())

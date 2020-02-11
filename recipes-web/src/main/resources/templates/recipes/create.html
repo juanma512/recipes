@@ -10,7 +10,7 @@
         rel="stylesheet"
         th:href="@{/webjars/bootstrap/4.4.1/css/bootstrap.min.css}">
 
-  <title>View recipe</title>
+  <title>New recipe</title>
 
   <style>
     .row {
@@ -41,10 +41,14 @@
                 <label>Categories:</label>
               </div>
               <div class="col-9 form-group">
-                <div class="custom-radio" th:each="category : ${categories}">
-                  <input th:value="${category.id}" type="checkbox"/>
-                  <label th:text="${category.description}"></label>
-                </div>
+                <ul>
+                  <li class="form-check" th:each="category : ${allCategories}">
+                    <input th:field="*{categories}" th:value="${category.description}"
+                           type="checkbox"/>
+                    <label th:for="${#ids.prev('categories')}"
+                           th:text="${category.description}"></label>
+                  </li>
+                </ul>
               </div>
             </div>
             <div class="row">
@@ -58,10 +62,11 @@
               </div>
               <div class="col-3 form-group">
                 <label for="difficulty">Difficulty</label>
-                <select class="form-control" id="difficulty">
-                  <option>EASY</option>
-                  <option>MEDIUM</option>
-                  <option>HARD</option>
+                <select class="form-control" id="difficulty" th:field="*{difficulty}">
+                  <option th:each="difficulty : ${T(com.jmoe.recipes.model.Difficulty).values()}"
+                          th:text="${difficulty.name()}"
+                          th:value="${difficulty.name()}">Value
+                  </option>
                 </select>
               </div>
               <div class="col-3">
@@ -88,7 +93,8 @@
                 <h3 class="text-white">Ingredients</h3>
               </div>
               <div class="col-1">
-                <a class="btn btn-secondary" href="#">Edit</a>
+                <a class="btn btn-secondary" href="#"
+                   th:href="@{'/recipe/' + ${recipe.id} + '/ingredients' }">Edit</a>
               </div>
             </div>
           </div>

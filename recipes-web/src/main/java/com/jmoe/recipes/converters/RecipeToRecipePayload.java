@@ -63,6 +63,7 @@ public class RecipeToRecipePayload implements Converter<Recipe, RecipePayload> {
             .url(recipe.getUrl())
             .directions(recipe.getDirections())
             .difficulty(recipe.getDifficulty())
+            .image(recipe.getImage())
             .notes(notesPayload)
             .categories(categoryPayloadSet)
             .build();
