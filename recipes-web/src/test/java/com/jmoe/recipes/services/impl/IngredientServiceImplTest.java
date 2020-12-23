@@ -60,7 +60,11 @@ public class IngredientServiceImplTest {
         Ingredient ingredient = Ingredient.builder().id(1L).build();
 
         // When
-        when(ingredientRepository.findById(anyLong())).thenReturn(Optional.of(ingredient));
+        when(recipeRepository.findById(anyLong()))
+            .thenReturn(Optional.of(Recipe.builder()
+                .id(1L)
+                .ingredients(Set.of(ingredient))
+                .build()));
         when(converter.convert(any(Ingredient.class)))
             .thenReturn(IngredientPayload.builder()
                 .id(1L)
@@ -69,7 +73,7 @@ public class IngredientServiceImplTest {
         // Then
         Optional<IngredientPayload> actual = ingredientService.getIngredient(1L, 1L);
         assertEquals(1L, actual.get().getId());
-        verify(ingredientRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).findById(anyLong());
     }
 
 }

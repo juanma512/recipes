@@ -9,9 +9,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.jmoe.recipes.model.Ingredient;
+import com.jmoe.recipes.model.Recipe;
 import com.jmoe.recipes.model.UnitOfMeasure;
 import com.jmoe.recipes.payloads.IngredientPayload;
+import com.jmoe.recipes.payloads.RecipePayload;
 import com.jmoe.recipes.payloads.UnitOfMeasurePayload;
+import com.jmoe.recipes.repositories.RecipeRepository;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,6 +48,9 @@ class IngredientToIngredientPayloadTest {
             .id(1L)
             .uom("Cup")
             .build();
+        Recipe recipe =  Recipe.builder()
+            .id(1L)
+            .build();
         UnitOfMeasure unitOfMeasure = UnitOfMeasure.builder()
             .id(1L)
             .uom("Cup")
@@ -54,6 +60,7 @@ class IngredientToIngredientPayloadTest {
             .amount(BigDecimal.valueOf(1))
             .description("Ingredient")
             .unitOfMeasure(unitOfMeasure)
+            .recipe(recipe)
             .build();
 
         // When

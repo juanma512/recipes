@@ -4,15 +4,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.jmoe.recipes.model.Ingredient;
+import com.jmoe.recipes.model.Recipe;
 import com.jmoe.recipes.model.UnitOfMeasure;
 import com.jmoe.recipes.payloads.IngredientPayload;
 import com.jmoe.recipes.payloads.UnitOfMeasurePayload;
+import com.jmoe.recipes.repositories.RecipeRepository;
 import java.math.BigDecimal;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,7 +27,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class IngredientPayloadToIngredientTest {
 
     @Mock
-    UnitOfMeasurePayloadToUnitOfMeasure unitOfMeasurePayloadToUnitOfMeasure;
+    private UnitOfMeasurePayloadToUnitOfMeasure unitOfMeasurePayloadToUnitOfMeasure;
+
+    @Mock
+    private RecipeRepository recipeRepository;
 
     @InjectMocks
     private IngredientPayloadToIngredient converter;

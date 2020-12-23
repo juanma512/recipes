@@ -56,7 +56,7 @@ public class IngredientController {
     }
 
     @ModelAttribute("allUnitsOfMeasure")
-    public Set<UnitOfMeasurePayload> getCategories() {
+    public Set<UnitOfMeasurePayload> getUnitOfMeasure() {
         return unitOfMeasureService.getUnitOfMeasures();
     }
 

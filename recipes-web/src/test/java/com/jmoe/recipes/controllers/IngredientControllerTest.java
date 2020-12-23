@@ -9,8 +9,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import com.jmoe.recipes.model.UnitOfMeasure;
 import com.jmoe.recipes.payloads.IngredientPayload;
+import com.jmoe.recipes.payloads.UnitOfMeasurePayload;
 import com.jmoe.recipes.services.IngredientService;
+import com.jmoe.recipes.services.UnitOfMeasureService;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +30,9 @@ public class IngredientControllerTest {
 
     @Mock
     private IngredientService ingredientService;
+
+    @Mock
+    private UnitOfMeasureService unitOfMeasureService;
 
     @InjectMocks
     private IngredientController ingredientController;
@@ -53,9 +59,12 @@ public class IngredientControllerTest {
         // Given
         Set<IngredientPayload> ingredientPayloadSet = new HashSet<>();
         ingredientPayloadSet.add(IngredientPayload.builder().id(1L).build());
+        Set<UnitOfMeasurePayload> unitOfMeasurePayloadSet = new HashSet<>();
+        unitOfMeasurePayloadSet.add(UnitOfMeasurePayload.builder().id(1L).build());
 
         // When
         when(ingredientService.getIngredientsForRecipe(anyLong())).thenReturn(ingredientPayloadSet);
+        when(unitOfMeasureService.getUnitOfMeasures()).thenReturn(unitOfMeasurePayloadSet);
 
         mockMvc.perform(get("/recipe/1/ingredients/1/show"))
             .andExpect(status().isOk())

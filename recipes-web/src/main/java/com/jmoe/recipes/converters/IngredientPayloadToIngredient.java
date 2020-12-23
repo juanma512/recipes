@@ -26,7 +26,7 @@ public class IngredientPayloadToIngredient implements Converter<IngredientPayloa
 
         return Ingredient.builder()
             .id(ingredientPayload.getId())
-            .recipe(recipeRepository.findById(ingredientPayload.getRecipeId()).get())
+            .recipe(recipeRepository.findById(ingredientPayload.getRecipeId()).orElse(null))
             .amount(ingredientPayload.getAmount())
             .description(ingredientPayload.getDescription())
             .unitOfMeasure(
