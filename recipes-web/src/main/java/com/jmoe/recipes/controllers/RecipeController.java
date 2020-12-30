@@ -1,6 +1,7 @@
 package com.jmoe.recipes.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jmoe.recipes.exceptions.NotFoundException;
 import com.jmoe.recipes.payloads.CategoryPayload;
 import com.jmoe.recipes.payloads.RecipePayload;
 import com.jmoe.recipes.services.CategoryService;
@@ -9,13 +10,17 @@ import java.util.Optional;
 import java.util.Set;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @Controller
@@ -73,6 +78,13 @@ public class RecipeController {
         log.debug("Deleting recipe " + id);
         recipeService.deleteRecipeById(id);
         return "redirect:/";
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public ModelAndView handleNotFound() {
+        log.error("Handling not found exception");
+        return new ModelAndView("error404");
     }
 
 }

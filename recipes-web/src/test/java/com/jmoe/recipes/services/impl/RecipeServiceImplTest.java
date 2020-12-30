@@ -1,6 +1,7 @@
 package com.jmoe.recipes.services.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
@@ -8,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.jmoe.recipes.converters.RecipeToRecipePayload;
+import com.jmoe.recipes.exceptions.NotFoundException;
 import com.jmoe.recipes.model.Recipe;
 import com.jmoe.recipes.payloads.RecipePayload;
 import com.jmoe.recipes.repositories.RecipeRepository;
@@ -63,6 +65,14 @@ public class RecipeServiceImplTest {
         Optional<RecipePayload> actual = recipeService.getRecipe(1L);
         assertEquals(1L, actual.get().getId());
         verify(recipeRepository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    public void getRecipeNotFound() {
+        assertThrows(NotFoundException.class,  () -> {
+            when(recipeRepository.findById(anyLong())).thenThrow(NotFoundException.class);
+            recipeService.getRecipe(1L);
+        });
     }
 
     @Test

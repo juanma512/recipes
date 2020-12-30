@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jmoe.recipes.exceptions.NotFoundException;
 import com.jmoe.recipes.payloads.CategoryPayload;
 import com.jmoe.recipes.payloads.RecipePayload;
 import com.jmoe.recipes.services.CategoryService;
@@ -120,5 +121,13 @@ class RecipeControllerTest {
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name("redirect:/"));
         verify(recipeService, times(1)).deleteRecipeById(anyLong());
+    }
+
+    @Test
+    void getRecipeCommandByIdTestNotFound() throws Exception {
+        when(recipeService.getRecipe(anyLong())).thenThrow(NotFoundException.class);
+        mockMvc.perform(get("/recipe/1/show"))
+            .andExpect(status().isNotFound())
+            .andExpect(view().name("error404"));
     }
 }

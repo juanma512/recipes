@@ -2,6 +2,7 @@ package com.jmoe.recipes.services.impl;
 
 import com.jmoe.recipes.converters.RecipePayloadToRecipe;
 import com.jmoe.recipes.converters.RecipeToRecipePayload;
+import com.jmoe.recipes.exceptions.NotFoundException;
 import com.jmoe.recipes.model.Recipe;
 import com.jmoe.recipes.payloads.RecipePayload;
 import com.jmoe.recipes.repositories.RecipeRepository;
@@ -9,9 +10,9 @@ import com.jmoe.recipes.services.RecipeService;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -43,6 +44,9 @@ public class RecipeServiceImpl implements RecipeService {
     public Optional<RecipePayload> getRecipe(Long id) {
         log.debug(String.format("Fetching recipe %s", id));
         Optional<Recipe> recipe = recipeRepository.findById(id);
+        if (recipe.isEmpty()) {
+            throw new NotFoundException("Recipe not found");
+        }
         return recipe.map(recipeToRecipePayload::convert);
     }
 
