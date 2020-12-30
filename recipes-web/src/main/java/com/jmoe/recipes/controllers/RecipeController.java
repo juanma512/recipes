@@ -6,13 +6,17 @@ import com.jmoe.recipes.payloads.CategoryPayload;
 import com.jmoe.recipes.payloads.RecipePayload;
 import com.jmoe.recipes.services.CategoryService;
 import com.jmoe.recipes.services.RecipeService;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import javax.validation.Valid;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -67,8 +71,18 @@ public class RecipeController {
 
     @SneakyThrows
     @PostMapping("/save")
-    public String saveRecipe(@ModelAttribute RecipePayload recipe) {
+    public String saveRecipe(@Valid @ModelAttribute("recipe") RecipePayload recipe, BindingResult bindingResult,
+        Model model) {
         log.debug(objectMapper.writeValueAsString(recipe));
+
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(error -> {
+                log.error(error.toString());
+            });
+            model.addAttribute("recipe", recipe);
+            return "/recipes/create";
+        }
+
         RecipePayload savedRecipePayload = recipeService.saveRecipe(recipe);
         return "redirect:/recipe/" + savedRecipePayload.getId() + "/show";
     }
@@ -82,9 +96,11 @@ public class RecipeController {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public ModelAndView handleNotFound() {
+    public ModelAndView handleNotFound(Exception ex) {
         log.error("Handling not found exception");
-        return new ModelAndView("error404");
+        Map<String, Object> model = new HashMap<>();
+        model.put("exception", ex);
+        return new ModelAndView("error404", model);
     }
 
 }

@@ -49,7 +49,9 @@ class RecipeControllerTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(recipeController)
+            .setControllerAdvice(new ControllerExceptionHandler())
+            .build();
     }
 
     @Test
@@ -109,9 +111,22 @@ class RecipeControllerTest {
         when(objectMapper.writeValueAsString(any(RecipePayload.class))).thenReturn("");
 
         // Then
-        mockMvc.perform(post("/recipe/save").contentType(MediaType.APPLICATION_FORM_URLENCODED))
+        mockMvc.perform(post("/recipe/save").contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .param("id", "")
+            .param("description", "some string")
+            .param("directions", "some directions"))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name("redirect:/recipe/2/show"));
+    }
+
+    @Test
+    void saveRecipeValidationFail() throws Exception {
+        // Then
+        mockMvc.perform(post("/recipe/save").contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .param("id", ""))
+            .andExpect(status().isOk())
+            .andExpect(model().attributeExists("recipe"))
+            .andExpect(view().name("/recipes/create"));
     }
 
     @Test
@@ -124,10 +139,17 @@ class RecipeControllerTest {
     }
 
     @Test
-    void getRecipeCommandByIdTestNotFound() throws Exception {
+    void getRecipePayloadByIdTestNotFound() throws Exception {
         when(recipeService.getRecipe(anyLong())).thenThrow(NotFoundException.class);
         mockMvc.perform(get("/recipe/1/show"))
             .andExpect(status().isNotFound())
             .andExpect(view().name("error404"));
+    }
+
+    @Test
+    void getRecipePayloadByIdTestBadRequest() throws Exception {
+        mockMvc.perform(get("/recipe/asdf/show"))
+            .andExpect(status().isBadRequest())
+            .andExpect(view().name("error400"));
     }
 }

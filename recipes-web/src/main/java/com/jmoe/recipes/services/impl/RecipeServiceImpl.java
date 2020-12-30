@@ -45,7 +45,7 @@ public class RecipeServiceImpl implements RecipeService {
         log.debug(String.format("Fetching recipe %s", id));
         Optional<Recipe> recipe = recipeRepository.findById(id);
         if (recipe.isEmpty()) {
-            throw new NotFoundException("Recipe not found");
+            throw new NotFoundException(String.format("Recipe not found with id %s", id));
         }
         return recipe.map(recipeToRecipePayload::convert);
     }
