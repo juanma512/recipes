@@ -18,12 +18,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
 @RequiredArgsConstructor
 @Controller
-@RequestMapping({"/recipe/{recipeId}/ingredients"})
 public class IngredientController {
 
     private final RecipeService recipeService;
@@ -31,16 +29,16 @@ public class IngredientController {
     private final UnitOfMeasureService unitOfMeasureService;
     private final ObjectMapper objectMapper;
 
-    @GetMapping("")
+    @GetMapping("/recipe/{recipeId}/ingredients")
     public String getIngredients(@PathVariable(name = "recipeId") Long recipeId, Model model) {
         log.debug("Controller -- Getting ingredients");
         Set<IngredientPayload> ingredients = ingredientService
             .getIngredientsForRecipe(recipeId);
         model.addAttribute("ingredients", ingredients);
-        return "/ingredients/list";
+        return "ingredients/list";
     }
 
-    @GetMapping("/{ingredientId}/show")
+    @GetMapping("/recipe/{recipeId}/ingredients/{ingredientId}/show")
     public String getIngredient(@PathVariable Long recipeId,
         @PathVariable Long ingredientId, Model model) {
         log.debug("Controller -- Get ingredient " + ingredientId + " for recipe " + recipeId);
@@ -52,7 +50,7 @@ public class IngredientController {
             .findFirst()
             .orElse(null);
         model.addAttribute("ingredient", ingredient);
-        return "/ingredients/show";
+        return "ingredients/show";
     }
 
     @ModelAttribute("allUnitsOfMeasure")
@@ -60,27 +58,27 @@ public class IngredientController {
         return unitOfMeasureService.getUnitOfMeasures();
     }
 
-    @GetMapping("/new")
+    @GetMapping("/recipe/{recipeId}/ingredients/new")
     public String newIngredient(@PathVariable(name = "recipeId") Long recipeId, Model model) {
         Optional<RecipePayload> recipePayload = recipeService.getRecipe(recipeId);
         model.addAttribute("ingredient", IngredientPayload.builder()
             .recipeId(recipePayload.map(RecipePayload::getId).orElse(null))
             .build());
-        return "/ingredients/create";
+        return "ingredients/create";
     }
 
-    @GetMapping("/{ingredientId}/update")
+    @GetMapping("/recipe/{recipeId}/ingredients/{ingredientId}/update")
     public String updateIngredient(@PathVariable(name = "recipeId") Long recipeId,
         @PathVariable(name = "ingredientId") Long ingredientId,
         Model model) {
         Optional<IngredientPayload> ingredientOptional = ingredientService
             .getIngredient(recipeId, ingredientId);
         ingredientOptional.ifPresent(ingredient -> model.addAttribute("ingredient", ingredient));
-        return "/ingredients/create";
+        return "ingredients/create";
     }
 
     @SneakyThrows
-    @PostMapping("/save")
+    @PostMapping("/recipe/{recipeId}/ingredients/save")
     public String saveOrUpdateIngredient(@ModelAttribute IngredientPayload ingredient) {
         log.debug(objectMapper.writeValueAsString(ingredient));
         IngredientPayload savedIngredientPayload = ingredientService
@@ -90,7 +88,7 @@ public class IngredientController {
             + "/show";
     }
 
-    @GetMapping("/{ingredientId}/delete")
+    @GetMapping("/recipe/{recipeId}/ingredients/{ingredientId}/delete")
     public String deleteRecipe(@PathVariable(name = "recipeId") Long recipeId,
         @PathVariable(name = "ingredientId") Long ingredientId) {
         log.debug("Deleting ingredient " + ingredientId);

@@ -28,7 +28,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @Controller
-@RequestMapping("/recipe")
 public class RecipeController {
 
     private final RecipeService recipeService;
@@ -43,11 +42,11 @@ public class RecipeController {
         this.objectMapper = objectMapper;
     }
 
-    @GetMapping("/{id}/show")
+    @GetMapping("/recipe/{id}/show")
     public String showRecipe(@PathVariable(name = "id") String id, Model model) {
         Optional<RecipePayload> recipe = recipeService.getRecipe(Long.valueOf(id));
         recipe.ifPresent(r -> model.addAttribute("recipe", r));
-        return "/recipes/show";
+        return "recipes/show";
     }
 
     @ModelAttribute("allCategories")
@@ -55,22 +54,22 @@ public class RecipeController {
         return categoryService.getCategories();
     }
 
-    @GetMapping("/new")
+    @GetMapping("/recipe/new")
     public String newRecipe(Model model) {
         log.debug("Display form ...");
         model.addAttribute("recipe", new RecipePayload());
-        return "/recipes/create";
+        return "recipes/create";
     }
 
-    @GetMapping("/{id}/update")
+    @GetMapping("/recipe/{id}/update")
     public String updateRecipe(@PathVariable(name = "id") String id, Model model) {
         Optional<RecipePayload> recipe = recipeService.getRecipe(Long.valueOf(id));
         recipe.ifPresent(r -> model.addAttribute("recipe", r));
-        return "/recipes/create";
+        return "recipes/create";
     }
 
     @SneakyThrows
-    @PostMapping("/save")
+    @PostMapping("/recipe/save")
     public String saveRecipe(@Valid @ModelAttribute("recipe") RecipePayload recipe, BindingResult bindingResult,
         Model model) {
         log.debug(objectMapper.writeValueAsString(recipe));
@@ -80,14 +79,14 @@ public class RecipeController {
                 log.error(error.toString());
             });
             model.addAttribute("recipe", recipe);
-            return "/recipes/create";
+            return "recipes/create";
         }
 
         RecipePayload savedRecipePayload = recipeService.saveRecipe(recipe);
         return "redirect:/recipe/" + savedRecipePayload.getId() + "/show";
     }
 
-    @GetMapping("/{id}/delete")
+    @GetMapping("/recipe/{id}/delete")
     public String deleteRecipe(@PathVariable(name = "id") Long id) {
         log.debug("Deleting recipe " + id);
         recipeService.deleteRecipeById(id);

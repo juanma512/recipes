@@ -15,32 +15,30 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/recipe/{recipeId}")
 public class ImageController {
 
     private final ImageUploadService imageUploadService;
     private final RecipeService recipeService;
 
-    @GetMapping("/image")
+    @GetMapping("/recipe/{recipeId}/image")
     public String showForm(@PathVariable(name = "recipeId") Long recipeId, Model model) {
         model.addAttribute("recipeId", recipeId);
-        return "/images/create";
+        return "images/create";
     }
 
-    @PostMapping("/image")
+    @PostMapping("/recipe/{recipeId}/image")
     public String saveImage(@PathVariable(name = "recipeId") Long recipeId,
         @RequestParam(name = "file") MultipartFile file) {
         RecipePayload recipePayload = imageUploadService.uploadImageForRecipe(recipeId, file);
         return "redirect:/recipe/" + recipePayload.getId() + "/show";
     }
 
-    @GetMapping("/image/show")
+    @GetMapping("/recipe/{recipeId}/image/show")
     public void showImage(@PathVariable(name = "recipeId") Long recipeId,
         HttpServletResponse response) {
         Optional<RecipePayload> recipePayloadOptional = recipeService.getRecipe(recipeId);

@@ -48,7 +48,7 @@ public class IngredientControllerTest {
     public void getIngredients() throws Exception {
         mockMvc.perform(get("/recipe/1/ingredients"))
             .andExpect(status().isOk())
-            .andExpect(view().name("/ingredients/list"))
+            .andExpect(view().name("ingredients/list"))
             .andExpect(model().attributeExists("ingredients"));
 
         verify(ingredientService, times(1)).getIngredientsForRecipe(anyLong());
@@ -68,7 +68,7 @@ public class IngredientControllerTest {
 
         mockMvc.perform(get("/recipe/1/ingredients/1/show"))
             .andExpect(status().isOk())
-            .andExpect(view().name("/ingredients/show"))
+            .andExpect(view().name("ingredients/show"))
             .andExpect(model().attributeExists("ingredient"));
 
         verify(ingredientService, times(1)).getIngredientsForRecipe(anyLong());
