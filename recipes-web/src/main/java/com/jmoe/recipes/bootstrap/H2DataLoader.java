@@ -14,9 +14,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -24,22 +26,14 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
+@Profile("default")
+@RequiredArgsConstructor
+public class H2DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private final UnitOfMeasureRepository unitOfMeasureRepository;
     private final CategoryRepository categoryRepository;
     private final RecipeRepository recipeRepository;
     private final ResourceLoader resourceLoader;
-
-    public DataLoader(UnitOfMeasureRepository unitOfMeasureRepository,
-        CategoryRepository categoryRepository,
-        RecipeRepository recipeRepository,
-        ResourceLoader resourceLoader) {
-        this.unitOfMeasureRepository = unitOfMeasureRepository;
-        this.categoryRepository = categoryRepository;
-        this.recipeRepository = recipeRepository;
-        this.resourceLoader = resourceLoader;
-    }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
